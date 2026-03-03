@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>أذكاري | Tasbeeh App</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;800&display=swap" rel="stylesheet">
+
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Cairo", sans-serif;
+}
+
+body {
+  background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+  color: #fff;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.container {
+  width: 95%;
+  max-width: 500px;
+  background: rgba(255,255,255,0.08);
+  backdrop-filter: blur(15px);
+  border-radius: 20px;
+  padding: 20px;
+  box-shadow: 0 0 25px rgba(0,0,0,0.4);
+}
+
+h1 {
+  text-align: center;
+  margin-bottom: 20px;
+  font-weight: 800;
+  color: #f1c40f;
+}
+
+.tabs {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 15px;
+}
+
+.tab-btn {
+  flex: 1;
+  margin: 5px;
+  padding: 10px;
+  border-radius: 12px;
+  border: none;
+  cursor: pointer;
+  background: rgba(255,255,255,0.1);
+  color: white;
+  transition: 0.3s;
+}
+
+.tab-btn:hover {
+  background: #f1c40f;
+  color: #000;
+}
+
+.tab-btn.active {
+  background: #f1c40f;
+  color: black;
+  box-shadow: 0 0 15px #f1c40f;
+}
+
+.content {
+  display: none;
+  animation: fade 0.4s ease-in-out;
+}
+
+.content.active {
+  display: block;
+}
+
+@keyframes fade {
+  from {opacity: 0; transform: translateY(10px);}
+  to {opacity: 1; transform: translateY(0);}
+}
+
+.counter {
+  text-align: center;
+  font-size: 45px;
+  margin: 20px 0;
+}
+
+.tasbeeh-btn {
+  width: 100%;
+  padding: 15px;
+  font-size: 18px;
+  border-radius: 15px;
+  border: none;
+  cursor: pointer;
+  background: #27ae60;
+  color: white;
+  transition: 0.2s;
+}
+
+.tasbeeh-btn:active {
+  transform: scale(0.95);
+  box-shadow: 0 0 15px #2ecc71;
+}
+
+.reset-btn {
+  margin-top: 10px;
+  width: 100%;
+  padding: 10px;
+  border-radius: 12px;
+  border: none;
+  cursor: pointer;
+  background: crimson;
+  color: white;
+}
+
+.search {
+  width: 100%;
+  padding: 10px;
+  border-radius: 10px;
+  border: none;
+  margin-bottom: 10px;
+}
+
+.azkar-list {
+  max-height: 250px;
+  overflow-y: auto;
+}
+
+.zekr {
+  background: rgba(255,255,255,0.1);
+  padding: 10px;
+  border-radius: 10px;
+  margin-bottom: 8px;
+  transition: 0.3s;
+}
+
+.zekr:hover {
+  background: rgba(255,255,255,0.2);
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+  <h1>📿 أذكاري</h1>
+
+  <div class="tabs">
+    <button class="tab-btn active" onclick="switchTab(event,'tasbeeh')">السبحة</button>
+    <button class="tab-btn" onclick="switchTab(event,'azkar')">الأذكار</button>
+  </div>
+
+  <!-- Tasbeeh -->
+  <div id="tasbeeh" class="content active">
+    <div class="counter" id="counter">0</div>
+    <button class="tasbeeh-btn" onclick="increment()">سبّح</button>
+    <button class="reset-btn" onclick="reset()">إعادة ضبط</button>
+  </div>
+
+  <!-- Azkar -->
+  <div id="azkar" class="content">
+    <input type="text" class="search" placeholder="ابحث عن ذكر..." onkeyup="searchAzkar(this.value)">
+    <div class="azkar-list" id="azkarList"></div>
+  </div>
+</div>
+
+<script>
+let count = localStorage.getItem("tasbeehCount") 
+            ? parseInt(localStorage.getItem("tasbeehCount")) 
+            : 0;
+
+document.getElementById("counter").innerText = count;
+
+function increment() {
+  count++;
+  document.getElementById("counter").innerText = count;
+  localStorage.setItem("tasbeehCount", count);
+}
+
+function reset() {
+  count = 0;
+  document.getElementById("counter").innerText = count;
+  localStorage.setItem("tasbeehCount", count);
+}
+
+function switchTab(e, tab) {
+  document.querySelectorAll(".content").forEach(c => c.classList.remove("active"));
+  document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+
+  document.getElementById(tab).classList.add("active");
+  e.target.classList.add("active");
+}
+
+const azkar = [
+  "سبحان الله",
+  "الحمد لله",
+  "الله أكبر",
+  "لا إله إلا الله",
+  "أستغفر الله",
+  "اللهم صل وسلم على نبينا محمد",
+  "لا حول ولا قوة إلا بالله"
+];
+
+function renderAzkar(list) {
+  const container = document.getElementById("azkarList");
+  container.innerHTML = "";
+  list.forEach(z => {
+    const div = document.createElement("div");
+    div.className = "zekr";
+    div.innerText = z;
+    container.appendChild(div);
+  });
+}
+
+function searchAzkar(value) {
+  const filtered = azkar.filter(z => z.includes(value));
+  renderAzkar(filtered);
+}
+
+renderAzkar(azkar);
+</script>
+
+</body>
+</html>
