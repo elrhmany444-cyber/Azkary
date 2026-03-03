@@ -15,7 +15,6 @@ body{
   background:linear-gradient(135deg,#0a192f,#112240);
   color:#fff;
   min-height:100vh;
-  overflow-x:hidden;
 }
 
 .container{
@@ -27,10 +26,8 @@ body{
 
 h1{
   font-size:32px;
-  margin-bottom:30px;
+  margin-bottom:25px;
   color:#ffd700;
-  letter-spacing:1px;
-  animation:fadeDown 1s ease;
 }
 
 .card{
@@ -39,27 +36,33 @@ h1{
   backdrop-filter:blur(10px);
   border-radius:25px;
   padding:25px;
-  margin:20px 0;
+  margin:25px 0;
   box-shadow:0 0 30px rgba(0,0,0,0.5);
   transition:0.4s ease;
-  animation:fadeUp 1s ease;
 }
 
 .card:hover{
-  transform:translateY(-5px);
+  transform:translateY(-6px);
   box-shadow:0 0 40px rgba(255,215,0,0.3);
+}
+
+.misbah-counter{
+  font-size:60px;
+  margin:20px 0;
+  font-weight:bold;
+  color:#ffd700;
 }
 
 .zikr{
   margin:20px 0;
   padding:15px;
   border-radius:18px;
-  background:rgba(10,25,47,0.8);
+  background:rgba(10,25,47,0.85);
   transition:0.3s;
 }
 
 .zikr:hover{
-  background:rgba(17,34,64,0.9);
+  background:rgba(17,34,64,0.95);
 }
 
 .zikr p{
@@ -75,7 +78,7 @@ h1{
 }
 
 button{
-  padding:10px 20px;
+  padding:10px 22px;
   border:none;
   border-radius:12px;
   cursor:pointer;
@@ -87,8 +90,13 @@ button{
 }
 
 button:hover{
-  transform:scale(1.07);
+  transform:scale(1.08);
   box-shadow:0 0 15px #ffd700;
+}
+
+.reset-btn{
+  background:linear-gradient(45deg,#cbd5e1,#94a3b8);
+  margin-right:8px;
 }
 
 .celebration{
@@ -96,7 +104,7 @@ button:hover{
   top:45%;
   left:50%;
   transform:translate(-50%,-50%) scale(0.5);
-  font-size:60px;
+  font-size:65px;
   display:none;
   color:#ffd700;
   animation:pop 0.8s ease forwards;
@@ -106,16 +114,6 @@ button:hover{
   0%{opacity:0;transform:translate(-50%,-50%) scale(0.5)}
   100%{opacity:1;transform:translate(-50%,-50%) scale(1)}
 }
-
-@keyframes fadeUp{
-  from{opacity:0;transform:translateY(40px)}
-  to{opacity:1;transform:translateY(0)}
-}
-
-@keyframes fadeDown{
-  from{opacity:0;transform:translateY(-40px)}
-  to{opacity:1;transform:translateY(0)}
-}
 </style>
 </head>
 
@@ -123,8 +121,17 @@ button:hover{
 
 <div class="container">
 
-<h1>أذكار</h1>
+<h1>أذكاري</h1>
 
+<!-- المسبحة -->
+<div class="card">
+  <h2 style="color:#ffd700;">المسبحة</h2>
+  <div id="misbah" class="misbah-counter">0</div>
+  <button onclick="incrementMisbah()">تسبيح</button>
+  <button class="reset-btn" onclick="resetMisbah()">إعادة</button>
+</div>
+
+<!-- الأذكار -->
 <div class="card">
 
 <div class="zikr">
@@ -169,27 +176,44 @@ button:hover{
 <div id="celebration" class="celebration">🎉✨🎉✨</div>
 
 <script>
+// المسبحة
+let misbahCount = Number(localStorage.getItem("misbah")) || 0;
+document.getElementById("misbah").innerText = misbahCount;
+
+function incrementMisbah(){
+  misbahCount++;
+  localStorage.setItem("misbah",misbahCount);
+  document.getElementById("misbah").innerText = misbahCount;
+  if(misbahCount % 100 === 0) showCelebration();
+}
+
+function resetMisbah(){
+  misbahCount = 0;
+  localStorage.setItem("misbah",0);
+  document.getElementById("misbah").innerText = 0;
+}
+
+// الأذكار
 function increment(id){
   let count = Number(localStorage.getItem(id)) || 0;
   count++;
   localStorage.setItem(id,count);
-  document.getElementById(id).innerText=count;
-
-  if(count % 100 === 0){
-    showCelebration();
-  }
+  document.getElementById(id).innerText = count;
+  if(count % 100 === 0) showCelebration();
 }
 
+// الاحتفال
 function showCelebration(){
-  const c=document.getElementById("celebration");
+  const c = document.getElementById("celebration");
   c.style.display="block";
   setTimeout(()=>{c.style.display="none"},2000);
 }
 
+// تحميل القيم المحفوظة
 document.querySelectorAll(".counter").forEach(el=>{
-  let id=el.id;
-  let saved=Number(localStorage.getItem(id))||0;
-  el.innerText=saved;
+  let id = el.id;
+  let saved = Number(localStorage.getItem(id)) || 0;
+  el.innerText = saved;
 });
 </script>
 
