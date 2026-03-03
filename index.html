@@ -217,5 +217,75 @@ document.querySelectorAll(".counter").forEach(el=>{
 });
 </script>
 
+  <!-- Quran Radio Section -->
+<div style="
+  background: linear-gradient(135deg,#0D1B2A,#1B263B);
+  padding:30px;
+  border-radius:20px;
+  text-align:center;
+  margin:40px auto;
+  max-width:420px;
+  box-shadow:0 10px 30px rgba(0,0,0,0.3);
+  color:white;
+  font-family:'Cairo',sans-serif;
+">
+
+  <h2 style="
+    color:#C6A75E;
+    margin-bottom:20px;
+    font-weight:800;
+    letter-spacing:1px;
+  ">
+    📻 راديو القرآن الكريم
+  </h2>
+
+  <audio id="quranRadio" style="display:none;">
+    <source src="https://radio.mp3quran.net:8000/;stream.mp3" type="audio/mpeg">
+  </audio>
+
+  <div style="display:flex; gap:15px; justify-content:center;">
+    
+    <button onclick="playRadio()" style="
+      background:#C6A75E;
+      color:#0D1B2A;
+      border:none;
+      padding:12px 25px;
+      border-radius:30px;
+      font-weight:700;
+      cursor:pointer;
+      transition:0.3s;
+    ">
+      ▶ تشغيل
+    </button>
+
+    <button onclick="pauseRadio()" style="
+      background:#ffffff20;
+      color:white;
+      border:1px solid #C6A75E;
+      padding:12px 25px;
+      border-radius:30px;
+      font-weight:700;
+      cursor:pointer;
+      transition:0.3s;
+    ">
+      ⏸ إيقاف
+    </button>
+
+  </div>
+
+</div>
+
+<script>
+  const radio = document.getElementById("quranRadio");
+
+  function playRadio() {
+    radio.play();
+  }
+
+  function pauseRadio() {
+    radio.pause();
+  }
+</script>
+  
 </body>
 </html>
